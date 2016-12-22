@@ -75,18 +75,6 @@
 
 ;;;; util functions
 
-(defun multi-keys--lookup-key (keys)
-  "Lookup KEY in all current key maps."
-  (let ((maps (current-minor-mode-maps))
-        res)
-    (while (and maps (not res))
-      (setq res (multi-keys-lookup-key1 (car maps) key)
-            maps (cdr maps)))
-    (or res
-        (if (current-local-map)
-            (multi-keys-lookup-key1 (current-local-map) key))
-        (multi-keys-lookup-key1 (current-global-map) key))))
-
 (defun multi-keys--lookup-key1 (map keys)
   "Like lookup-key but no third arg and no numeric return value."
   (let ((cmd (lookup-key map keys)))
