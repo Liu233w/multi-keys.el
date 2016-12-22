@@ -44,7 +44,6 @@
 ;; `multi-keys-translate-by-timer'
 
 ;;; Code:
-(require 'cl)
 (require 'timer)
 (require 'simple)
 
@@ -197,7 +196,7 @@ can't unset key defination in `key-translation-map'."
       (multi-keys--bind-key keymap (vector 'multi-keys key2 key1) command))))
 
 (defun multi-keys--bind-key (keymap keys command)
-  (define-key key-translation-map (subseq keys 1 2)
+  (define-key key-translation-map (cl-subseq keys 1 2)
     #'multi-keys-maybe-translate)
   (define-key keymap keys command))
 
