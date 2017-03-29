@@ -111,6 +111,18 @@ If this function finds nothing, it returns nil."
       ;; else
       nil)))
 
+(defun multi-keys--call-keymap (map &optional prompt)
+  ;; from http://stackoverflow.com/a/24916987
+  "Read a key sequence and call the command it's bound to in MAP."
+  ;; Note: MAP must be a symbol so we can trick `describe-bindings' into giving
+  ;; us a nice help text.
+  (let* ((overriding-local-map `(keymap (,map . ,map)))
+         (help-form `(describe-bindings ,(vector map)))
+         (key (read-key-sequence prompt))
+         (cmd (lookup-key (symbol-value map) key t)))
+    (if (functionp cmd) (call-interactively cmd)
+      (user-error "%s is undefined" key))))
+
 (defun multi-keys-maybe-translate (prompt)
   "Translate two key press into a key chord.
 
@@ -185,16 +197,28 @@ same. Currently only elements that corresponds to ascii codes in
 the range 32 to 126 can be used.
 
 If COMMAND is nil, the multi-keys is removed. Notice that it
-can't unset key defination in `key-translation-map'."
+can't unset key defination in `key-translation-map'.
+
+If COMMAND is a symbol of keymap, the KEYS will be a prefix of
+the keymap."
   (unless (and (stringp keys) (= (length keys) 2))
     (error "Keys must be a two-char-string"))
   (let ((key1 (logand 255 (aref keys 0)))
-        (key2 (logand 255 (aref keys 1))))
+        (key2 (logand 255 (aref keys 1)))
+        (to-be-called (cond
+                       ((commandp command)
+                        command)
+                       ((and (symbolp command) (keymapp (symbol-value command)))
+                        (lambda ()
+                          (interactive)
+                          (multi-keys--call-keymap
+                           command (concat "Enter a " (symbol-name command) " command: "))))
+                       (t (user-error "Command must be a command or a symbol of keymap")))))
     (if (eq key1 key2)
         (error "Keys can't be the same.")
       ;; else
-      (multi-keys--bind-key keymap (vector 'multi-keys key1 key2) command)
-      (multi-keys--bind-key keymap (vector 'multi-keys key2 key1) command))))
+      (multi-keys--bind-key keymap (vector 'multi-keys key1 key2) to-be-called)
+      (multi-keys--bind-key keymap (vector 'multi-keys key2 key1) to-be-called))))
 
 (defun multi-keys--bind-key (keymap keys command)
   (define-key key-translation-map (cl-subseq keys 1 2)
