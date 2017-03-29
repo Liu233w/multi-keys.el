@@ -1,7 +1,7 @@
 ;;; multi-keys.el --- Like key-chord.el but without input-method dependent  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
-;;               2016  Liu233w
+;;               2016-2017  Liu233w
 
 ;; Author: Liu233w <wwwlsmcom@outlook.com>
 ;; Keywords: convenience
