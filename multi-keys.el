@@ -1,9 +1,9 @@
 ;;; multi-keys.el --- Like key-chord.el but without input-method dependent  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2003,2005,2008,2012 David Andersson
-;;               2016-2017  Liu233w
+;;               2016-2022  Shumin Liu
 
-;; Author: Liu233w <wwwlsmcom@outlook.com>
+;; Author: Shumin Liu <gh@liu233w.com>
 ;; Keywords: convenience
 ;; Version: 0.1.0
 ;; Package-Requires: ()

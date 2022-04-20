@@ -1,5 +1,5 @@
 #+TITLE: multi-keys.el
-#+AUTHOR: Liu233w
+#+AUTHOR: Shumin Liu
 
 Like [[https://www.emacswiki.org/emacs/KeyChord][key-chord.el]] but without input-method dependent. Notice that it has not
 supported two continues keys such as ~hh~ so far.
