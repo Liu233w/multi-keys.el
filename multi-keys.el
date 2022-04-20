@@ -84,7 +84,7 @@
       cmd)))
 
 (defun multi-keys--lookup-key (keys)
-  (or (loop for map in (current-minor-mode-maps)
+  (or (cl-loop for map in (current-minor-mode-maps)
             for res = (multi-keys--lookup-key1 map keys)
             when res return res
             finally return nil)
@@ -98,7 +98,7 @@
 If this function finds nothing, it returns nil."
   (let ((the-second-key (read-event nil nil multi-keys-two-keys-delay)))
     (if the-second-key
-        (let* ((keys (concatenate 'vector
+        (let* ((keys (cl-concatenate 'vector
                                   [multi-keys]
                                   (this-command-keys-vector)
                                   (vector the-second-key)))
@@ -125,10 +125,10 @@ translation job."
 (defun multi-keys-translate-by-timer (_)
   "One of the translation strategy.
 
-It will exit command loop by using quit signal. Be effective when
+It will exit command cl-loop by using quit signal. Be effective when
 selection box of input method is active."
 
-  "multi-keys 的转换策略之一，主要使用 quit 来退出当前的 command loop。
+  "multi-keys 的转换策略之一，主要使用 quit 来退出当前的 command cl-loop。
 
 在输入法选词框打开的时候也可以使用，但在使用之后会强制退出选词框
 并将选词框中的内容留在 buffer 中。并且会在 mini-buffer 里面留下
